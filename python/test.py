@@ -10,7 +10,7 @@ def login():
 
 
 def createAccount():
-    payload = {'username': 'jens', 'password': 'madsen', "phone": "0730312550", "driver": False}
+    payload = {'username': 'jens', 'password': 'madsen', "phone": "11111", "driver": False}
     r = requests.post(url, payload)
     print(r.json())
 
@@ -27,4 +27,4 @@ def adduser():
     r = requests.post("http://localhost:80/users/", data=payload)
     print(r.json())
 
-login()
+createAccount()
