@@ -2,4 +2,11 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to Testpage
+  p
+  form(action='/users/login',method='post')
+    input(id='username',type='text',value='',placeholder='username')
+    p
+    input(id='password',type='text',value='',placeholder='password')
+    p
+    input(type='submit',value='Login')
