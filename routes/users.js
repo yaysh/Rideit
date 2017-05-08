@@ -30,12 +30,16 @@ router.post("/login", (req, res, next) => {
     db.users.findOne({ "username": user.username, "password": user.password }, (err, user) =>  {
         if (err) {
             res.json({
-                "error": err
+                error: "error"
             })
         } else if (user) {
-            res.json(user);
+            res.json({
+                success: user
+            });
         } else {
-            res.json({ "error": "username or account wrong" });
+            res.json({ 
+                error: "username or password wrong" 
+            });
         }
     });
 })
