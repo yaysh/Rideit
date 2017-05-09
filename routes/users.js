@@ -37,7 +37,7 @@ router.post("/login", (req, res, next) => {
             })
         } else if (user) {
             res.json({
-                success: "login successful"
+                success: true
             });
         } else {
             res.json({ 
