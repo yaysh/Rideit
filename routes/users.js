@@ -27,14 +27,17 @@ router.get("/", (req, res, next) => {
 */
 router.post("/login", (req, res, next) => {
     const user = req.body;
-    db.users.findOne({ "username": user.username, "password": user.password }, (err, user) =>  {
+    db.users.findOne({ 
+        email: user.email, 
+        password: user.password 
+    }, (err, user) =>  {
         if (err) {
             res.json({
                 error: "error"
             })
         } else if (user) {
             res.json({
-                success: user
+                success: "login successful"
             });
         } else {
             res.json({ 
@@ -83,19 +86,27 @@ function createUser(res, user) {
             res.json({ "error": "error inside users.save" });
         }
         console.log(user);
-        res.json(user);
+        res.json({
+            success: "User was created"
+        });
     });
 }
 
 function userExists(res, user) {
     return new Promise(
         (resolve, reject) => {
-            db.users.findOne({ username: user.username }, (err, user) => {
+            db.users.findOne({ 
+                email: user.email 
+            }, (err, user) => {
                 if (err) {
-                    res.json({ "error": "userExists error" });
+                    res.json({ 
+                        error: "userExists error" 
+                    });
                 } else {
                     if (user) {
-                        res.json({ "error": "user already exists" });
+                        res.json({ 
+                            error: "user already exists" 
+                        });
                     } else {
                         resolve(false);
                     }
@@ -114,11 +125,13 @@ function userExists(res, user) {
     fix some security around this one lads
  */
 router.delete("/:id", (req, res, next) => {
-    db.users.remove({ _id: mongojs.ObjectId(req.params.id) }, (err, user) => {
+    db.users.remove({ 
+        _id: mongojs.ObjectId(req.params.id) 
+    }, (err, user) => {
         if (err) {
             console.log("error")
             res.json({
-                "error": err
+                error: err
             })
         } else {
             res.json(user);
