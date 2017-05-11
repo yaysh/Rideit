@@ -52,11 +52,18 @@ router.post("/login", (req, res, next) => {
 /* 
     create user 
 */
+
+//name string, email string, password string, phone string, isdriver bool
 router.post("/register", (req, res, next) => {
     const user = req.body;
+    const name = user.name;
+    const email = user.email;
+    const password = user.password;
+    const phone = user.phone;
+    const isDriver = user.isDriver
     console.log("got the request")
     console.log(user);
-    if (!user.username) {
+    if (!user.email) {
         res.status(400);
         res.json({
             "error": "You need to choose a username"
