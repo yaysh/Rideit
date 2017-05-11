@@ -52,7 +52,7 @@ router.post("/login", (req, res, next) => {
 /* 
     create user 
 */
-router.post("/", (req, res, next) => {
+router.post("/register", (req, res, next) => {
     const user = req.body;
     console.log("got the request")
     console.log(user);
