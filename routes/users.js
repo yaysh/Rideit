@@ -37,7 +37,10 @@ router.post("/login", (req, res, next) => {
             })
         } else if (user) {
             res.json({
-                success: true
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                isDriver: user.isDriver
             });
         } else {
             res.json({ 
@@ -94,10 +97,7 @@ function createUser(res, user) {
         }
         console.log(user);
         res.json({
-            name: user.name,
-            phone: user.phone,
-            email: user.email,
-            isDriver: user.isDriver
+            success: true
         });
     });
 }
