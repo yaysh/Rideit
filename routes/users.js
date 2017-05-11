@@ -94,7 +94,10 @@ function createUser(res, user) {
         }
         console.log(user);
         res.json({
-            success: "User was created"
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+            isDriver: user.isDriver
         });
     });
 }
