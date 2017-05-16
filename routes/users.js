@@ -6,10 +6,10 @@ var db = mongojs("mongodb://localhost:27017/rideit", ["users"]);
 
 //mötasplats, tid, email, namn, tlfnr, isdriver
 
-router.post("/createad", (req, res, next) => {
+router.post("/ad", (req, res, next) => {
     const ad = req.body;
     
-    db.ad.save(ad, (err, result) => {
+    db.ads.save(ad, (err, result) => {
         if (err) {
             res.json({ "error": "error inside create ad" });
         }
@@ -18,6 +18,24 @@ router.post("/createad", (req, res, next) => {
             success: true
         });
     });
+})
+
+router.get("/ad", (req, res, next) => {
+    db.ads.find((err, ads) => {
+        if(err){
+            res.json({
+                error: "db error"
+            });
+        } else if(ads){
+            res.json({
+                success: ads
+            });
+        } else {
+            res.json({
+                error: "there are not ads"
+            });
+        }
+    })
 })
 
 
