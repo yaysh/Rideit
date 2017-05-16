@@ -4,6 +4,22 @@ var mongojs = require("mongojs");
 var db = mongojs("mongodb://localhost:27017/rideit", ["users"]);
 
 
+//mötasplats, tid, email, namn, tlfnr, isdriver
+
+router.post("/createad", (req, res, next) => {
+    const ad = req.body;
+    
+    db.ad.save(ad, (err, result) => {
+        if (err) {
+            res.json({ "error": "error inside create ad" });
+        }
+        console.log(result);
+        res.json({
+            success: true
+        });
+    });
+})
+
 
 /* 
     get all users
@@ -26,7 +42,9 @@ router.get("/", (req, res, next) => {
     Login a user 
 */
 router.post("/login", (req, res, next) => {
+
     const user = req.body;
+
     db.users.findOne({ 
         email: user.email, 
         password: user.password 
@@ -63,9 +81,11 @@ router.post("/register", (req, res, next) => {
     const email = user.email;
     const password = user.password;
     const phone = user.phone;
-    const isDriver = user.isDriver
+    const isDriver = user.isDriver; 
+
     console.log("got the request")
     console.log(user);
+
     if (!user.email) {
         res.status(400);
         res.json({
