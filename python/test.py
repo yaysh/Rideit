@@ -4,7 +4,7 @@ import requests
 url = "http://yaysh.me/"
 
 def main():
-    getTest()
+    createAd()
 
 def getTest():
     r = requests.get(url)
@@ -32,5 +32,20 @@ def adduser():
     payload = {'username': 'jens', 'password': 'madsen', "phone": "0730312550"}
     r = requests.post("http://localhost:80/users/", data=payload)
     print(r.json())
+
+
+def createAd():
+    data = {
+        "meetingPoint": "göteborg",
+        "time": "07:30",
+        "email": "jens@gmail.com",
+        "name": "jens madsen",
+        "phone": "073030303030",
+        "isDriver": "false"
+    }
+
+    r = requests.post("http://yaysh.me/users/ad", data)
+    print(r.json())
+
 
 main()
