@@ -8,7 +8,7 @@ var db = mongojs("mongodb://localhost:27017/rideit", ["users"]);
 
 router.post("/ad", (req, res, next) => {
     const ad = req.body;
-    
+
     db.ads.save(ad, (err, result) => {
         if (err) {
             res.json({ "error": "error inside create ad" });
@@ -22,13 +22,13 @@ router.post("/ad", (req, res, next) => {
 
 router.get("/ad", (req, res, next) => {
     db.ads.find((err, ads) => {
-        if(err){
+        if (err) {
             res.json({
                 error: "db error"
             });
-        } else if(ads){
+        } else if (ads) {
             res.json({
-                success: ads
+                ads
             });
         } else {
             res.json({
@@ -63,9 +63,9 @@ router.post("/login", (req, res, next) => {
 
     const user = req.body;
 
-    db.users.findOne({ 
-        email: user.email, 
-        password: user.password 
+    db.users.findOne({
+        email: user.email,
+        password: user.password
     }, (err, user) =>  {
         if (err) {
             res.json({
@@ -79,8 +79,8 @@ router.post("/login", (req, res, next) => {
                 isDriver: user.isDriver
             });
         } else {
-            res.json({ 
-                error: "username or password wrong" 
+            res.json({
+                error: "username or password wrong"
             });
         }
     });
@@ -99,7 +99,7 @@ router.post("/register", (req, res, next) => {
     const email = user.email;
     const password = user.password;
     const phone = user.phone;
-    const isDriver = user.isDriver; 
+    const isDriver = user.isDriver;
 
     console.log("got the request")
     console.log(user);
@@ -143,17 +143,17 @@ function createUser(res, user) {
 function userExists(res, user) {
     return new Promise(
         (resolve, reject) => {
-            db.users.findOne({ 
-                email: user.email 
+            db.users.findOne({
+                email: user.email
             }, (err, user) => {
                 if (err) {
-                    res.json({ 
-                        error: "userExists error" 
+                    res.json({
+                        error: "userExists error"
                     });
                 } else {
                     if (user) {
-                        res.json({ 
-                            error: "user already exists" 
+                        res.json({
+                            error: "user already exists"
                         });
                     } else {
                         resolve(false);
@@ -173,8 +173,8 @@ function userExists(res, user) {
     fix some security around this one lads
  */
 router.delete("/:id", (req, res, next) => {
-    db.users.remove({ 
-        _id: mongojs.ObjectId(req.params.id) 
+    db.users.remove({
+        _id: mongojs.ObjectId(req.params.id)
     }, (err, user) => {
         if (err) {
             console.log("error")
