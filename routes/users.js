@@ -20,7 +20,6 @@ router.post("/ad", (req, res, next) => {
 })
 
 router.get("/ad", (req, res, next) => {
-    console.log(req.query);
     const user_id = req.query.creator_id;
     if (user_id != null) {
         db.ads.find({ creator_id: user_id }, (err, ads) => {
@@ -75,8 +74,19 @@ router.get("/", (req, res, next) => {
     })
 });
 
-
-
+router.put("/", (req, res, next) => {
+    console.log(req.body);
+    const user_id = mongojs.ObjectId(req.body.id);
+    db.users.update({ "_id": user_id }, {
+        $set: { password: req.body.password } 
+    }, (err, user) => {
+        if (user) {
+            res.json({
+                success: "true"
+            });
+        }
+    });
+});
 /* 
     Login a user 
 */
