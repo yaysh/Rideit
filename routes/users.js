@@ -73,10 +73,7 @@ router.post("/login", (req, res, next) => {
             })
         } else if (user) {
             res.json({
-                name: user.name,
-                phone: user.phone,
-                email: user.email,
-                isDriver: user.isDriver
+                user
             });
         } else {
             res.json({
