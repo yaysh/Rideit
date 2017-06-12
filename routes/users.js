@@ -8,7 +8,6 @@ var db = mongojs("mongodb://localhost:27017/rideit", ["users"]);
 
 router.post("/ad", (req, res, next) => {
     const ad = req.body;
-
     db.ads.save(ad, (err, result) => {
         if (err) {
             res.json({ "error": "error inside create ad" });
@@ -21,22 +20,44 @@ router.post("/ad", (req, res, next) => {
 })
 
 router.get("/ad", (req, res, next) => {
-    db.ads.find((err, ads) => {
-        if (err) {
-            res.json({
-                error: "db error"
-            });
-        } else if (ads) {
-            res.json({
-                ads
-            });
-        } else {
-            res.json({
-                error: "there are not ads"
-            });
-        }
-    })
-})
+    console.log(req.query);
+    const user_id = req.query.creator_id;
+    if (user_id != null) {
+        db.ads.find({ creator_id: user_id }, (err, ads) => {
+            if (err) {
+                res.json({
+                    error: "db error"
+                });
+            } else if (ads) {
+                res.json({
+                    ads
+                });
+            } else {
+                res.json({
+                    error: "there are not ads"
+                });
+            }
+        });
+    } else {
+        db.ads.find((err, ads) => {
+            if (err) {
+                res.json({
+                    error: "db error"
+                });
+            } else if (ads) {
+                res.json({
+                    ads
+                });
+            } else {
+                res.json({
+                    error: "there are not ads"
+                });
+            }
+        });
+    }
+
+
+});
 
 
 /* 
