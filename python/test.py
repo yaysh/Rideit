@@ -4,7 +4,8 @@ import requests
 url = "http://yaysh.me/"
 
 def main():
-    createAd()
+    # createAd()
+    deleteUser()
 
 def getTest():
     r = requests.get(url)
@@ -33,6 +34,9 @@ def adduser():
     r = requests.post("http://localhost:80/users/", data=payload)
     print(r.json())
 
+def deleteUser():
+    r = requests.delete("http://192.168.0.10:80/users/5940496cf83d522cfb36e70d")
+    print (r.json())
 
 def createAd():
     data = {

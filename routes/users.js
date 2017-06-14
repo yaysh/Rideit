@@ -3,7 +3,6 @@ var router = express.Router();
 var mongojs = require("mongojs");
 var db = mongojs("mongodb://localhost:27017/rideit", ["users"]);
 
-
 //mötasplats, tid, email, namn, tlfnr, isdriver
 
 router.post("/ad", (req, res, next) => {
@@ -12,7 +11,7 @@ router.post("/ad", (req, res, next) => {
         if (err) {
             res.json({ "error": "error inside create ad" });
         }
-        console.log(result);
+
         res.json({
             success: true
         });
@@ -75,17 +74,39 @@ router.get("/", (req, res, next) => {
 });
 
 router.put("/", (req, res, next) => {
-    console.log(req.body);
-    const user_id = mongojs.ObjectId(req.body.id);
-    db.users.update({ "_id": user_id }, {
-        $set: { password: req.body.password } 
-    }, (err, user) => {
-        if (user) {
-            res.json({
-                success: "true"
-            });
+    const user_id = mongojs.ObjectId(req.body._id);
+    const email = req.body.email;
+    const password = req.body.password;
+    findUserByID(user_id).then((oldUser) => {
+
+        if (oldUser) {
+            var oldEmail = oldUser.email;
+            var oldPassword = oldUser.password;
+            if (email.length > 0) {
+                oldEmail = email;
+            }
+            if (password.length > 0)  {
+                oldPassword = password;
+            }
+            db.users.update({ "_id": user_id }, {
+                email: oldEmail,
+                password: oldPassword
+            }, (err, user) => {
+                if (user) {
+
+                    res.json({
+                        success: "true"
+                    });
+                } else {
+                    res.json({
+                        success: "false"
+                    });
+                }
+            })
         }
     });
+
+
 });
 /* 
     Login a user 
@@ -121,16 +142,13 @@ router.post("/login", (req, res, next) => {
 */
 
 //name string, email string, password string, phone string, isdriver bool
-router.post("/register", (req, res, next) => {
+router.post("/", (req, res, next) => {
     const user = req.body;
     const name = user.name;
     const email = user.email;
     const password = user.password;
     const phone = user.phone;
     const isDriver = user.isDriver;
-
-    console.log("got the request")
-    console.log(user);
 
     if (!user.email) {
         res.status(400);
@@ -161,9 +179,9 @@ function createUser(res, user) {
         if (err) {
             res.json({ "error": "error inside users.save" });
         }
-        console.log(user);
+
         res.json({
-            success: true
+            user
         });
     });
 }
@@ -195,17 +213,30 @@ function userExists(res, user) {
     Create user functions end here
 */
 
-
+function findUserByID(user_id) {
+    return new Promise(
+        (resolve, reject) => {
+            db.users.findOne({
+                _id: user_id
+            }, (err, user) => {
+                if (user) {
+                    resolve(user);
+                }
+            });
+        }
+    );
+}
 /* 
     delete a single user based on the user ID found in the mongodb 
     fix some security around this one lads
  */
 router.delete("/:id", (req, res, next) => {
+    console.log("hello");
     db.users.remove({
         _id: mongojs.ObjectId(req.params.id)
     }, (err, user) => {
         if (err) {
-            console.log("error")
+
             res.json({
                 error: err
             })
